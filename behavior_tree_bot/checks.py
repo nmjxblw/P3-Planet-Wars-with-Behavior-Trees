@@ -15,4 +15,4 @@ def test_check(state):
 
 def be_attacked(state):
     return any(enemy_fleet for enemy_fleet in state.enemy_fleets() \
-               if enemy_fleet.destination_planet in state.my_planets())
+               if state.planets[enemy_fleet.destination_planet] in state.my_planets())
