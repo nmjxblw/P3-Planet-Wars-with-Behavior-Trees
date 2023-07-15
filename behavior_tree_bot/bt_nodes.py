@@ -4,10 +4,13 @@ import logging
 
 def log_execution(fn):
     def logged_fn(self, state):
-        logging.debug('Executing:' + str(self))
+        logging.debug("Executing:" + str(self))
         result = fn(self, state)
-        logging.debug('Result: ' + str(self) + ' -> ' + ('Success' if result else 'Failure'))
+        logging.debug(
+            "Result: " + str(self) + " -> " + ("Success" if result else "Failure")
+        )
         return result
+
     return logged_fn
 
 
@@ -32,15 +35,15 @@ class Composite(Node):
         raise NotImplementedError
 
     def __str__(self):
-        return self.__class__.__name__ + ': ' + self.name if self.name else ''
+        return self.__class__.__name__ + ": " + self.name if self.name else ""
 
     def tree_to_string(self, indent=0):
-        string = '| ' * indent + str(self) + '\n'
+        string = "| " * indent + str(self) + "\n"
         for child in self.child_nodes:
-            if hasattr(child, 'tree_to_string'):
+            if hasattr(child, "tree_to_string"):
                 string += child.tree_to_string(indent + 1)
             else:
-                string += '| ' * (indent + 1) + str(child) + '\n'
+                string += "| " * (indent + 1) + str(child) + "\n"
         return string
 
 
@@ -77,7 +80,7 @@ class Check(Node):
         return self.check_function(state)
 
     def __str__(self):
-        return self.__class__.__name__ + ': ' + self.check_function.__name__
+        return self.__class__.__name__ + ": " + self.check_function.__name__
 
 
 class Action(Node):
@@ -89,4 +92,4 @@ class Action(Node):
         return self.action_function(state)
 
     def __str__(self):
-        return self.__class__.__name__ + ': ' + self.action_function.__name__
+        return self.__class__.__name__ + ": " + self.action_function.__name__

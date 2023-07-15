@@ -38,6 +38,8 @@ def spread(state):
 def attack(state):
     my_planets = iter(sorted(state.my_planets(), key=lambda p: p.num_ships))
 
+    # this line's function:
+    # find out a list of enemy_planets, for all planets none of them is a fleet's current target.
     enemy_planets = [planet for planet in state.enemy_planets()
                       if not any(fleet.destination_planet == planet.ID for fleet in state.my_fleets())]
     enemy_planets.sort(key=lambda p: p.num_ships)
@@ -48,6 +50,7 @@ def attack(state):
         my_planet = next(my_planets)
         target_planet = next(target_planets)
         while True:
+            # the re
             required_ships = target_planet.num_ships + \
                                  state.distance(my_planet.ID, target_planet.ID) * target_planet.growth_rate + 1
 
