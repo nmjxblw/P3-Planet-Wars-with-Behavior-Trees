@@ -41,7 +41,7 @@ def setup_behavior_tree():
     defense = Action(defense_attacked_planet)
     defense_plan.child_nodes = [attacked_by_enemy_check,defense]
 
-    root.child_nodes = [defense_plan, offensive_plan, spread_sequence, attack.copy()]
+    root.child_nodes = [offensive_plan, defense_plan, spread_sequence, attack.copy()]
 
     logging.info('\n' + root.tree_to_string())
     return root
