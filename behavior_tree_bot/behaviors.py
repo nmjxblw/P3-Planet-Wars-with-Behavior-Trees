@@ -3,51 +3,96 @@ import sys
 sys.path.insert(0, "../")
 from planet_wars import issue_order
 
+def find_closest_strong_planet(state, my_planets, target_planet):
+    if len(my_planets) < 1:
+        return None,None
+
+    distance = state.distance(my_planets[0].ID, target_planet.ID)
+    closest_planet = my_planets[0]
+    #exp = target_planet.growth_rate / (target_planet.num_ships + target_planet.growth_rate * distance + 1) * distance
+    for planet in my_planets:
+        curr_distance = state.distance(planet.ID, target_planet.ID)
+        curr_exp = target_planet.growth_rate / (target_planet.num_ships + target_planet.growth_rate * curr_distance + 1) * curr_distance
+        if curr_distance < distance  and planet.num_ships >= target_planet.num_ships + target_planet.growth_rate * curr_distance + 1:
+            distance = curr_distance
+            #exp = curr_exp
+            closest_planet = planet
+
+    return closest_planet, distance
+
+
+# def attack_weakest_enemy_planet(state):
+#     strongest_planet = max(state.my_planets(), key=lambda t: t.num_ships, default=None)
+
+#     my_target_planets = [state.planets[f.destination_planet] for f in state.my_fleets()]
+#     valied_planets = [p for p in state.enemy_planets() if p not in my_target_planets]
+
+
+    
+#     if not strongest_planet or len(valied_planets) <= 0:
+#         return False
+
+#     weakest_planets = iter(
+#         sorted(
+#             valied_planets,
+#             key=lambda p: (
+#                 p.num_ships,
+#                 -p.growth_rate
+#                 / (
+#                     (
+#                         p.num_ships
+#                         + state.distance(strongest_planet.ID, p.ID) * p.growth_rate
+#                         + 1
+#                     )
+#                     * state.distance(strongest_planet.ID, p.ID)
+#                 ),
+#             ),
+#         )
+#     )
+
+
+
+#     try:
+#         weakest_planet = next(weakest_planets)
+#         while True:
+#             require_ships = (
+#                 weakest_planet.num_ships
+#                 + state.distance(strongest_planet.ID, weakest_planet.ID)
+#                 * weakest_planet.growth_rate
+#                 + 1
+#             )
+#             if require_ships <= strongest_planet.num_ships / 2:
+#                 return issue_order(
+#                     state, strongest_planet.ID, weakest_planet.ID, require_ships
+#                 )
+#             else:
+#                 weakest_planet = next(weakest_planets)
+#     except StopIteration:
+#         return False
 
 def attack_weakest_enemy_planet(state):
-    strongest_planet = max(state.my_planets(), key=lambda t: t.num_ships, default=None)
-
     my_target_planets = [state.planets[f.destination_planet] for f in state.my_fleets()]
     valied_planets = [p for p in state.enemy_planets() if p not in my_target_planets]
 
-    if not strongest_planet or len(valied_planets) <= 0:
+    if len(valied_planets) < 1:
         return False
+    
+    attack_List = []
 
-    weakest_planets = iter(
-        sorted(
-            valied_planets,
-            key=lambda p: (
-                p.num_ships,
-                -p.growth_rate
-                / (
-                    (
-                        p.num_ships
-                        + state.distance(strongest_planet.ID, p.ID) * p.growth_rate
-                        + 1
-                    )
-                    * state.distance(strongest_planet.ID, p.ID)
-                ),
-            ),
-        )
-    )
+    valied_planets.sort(key=lambda t: t.num_ships, reverse=False)
 
-    try:
-        weakest_planet = next(weakest_planets)
-        while True:
-            require_ships = (
-                weakest_planet.num_ships
-                + state.distance(strongest_planet.ID, weakest_planet.ID)
-                * weakest_planet.growth_rate
-                + 1
-            )
-            if require_ships <= strongest_planet.num_ships / 2:
-                return issue_order(
-                    state, strongest_planet.ID, weakest_planet.ID, require_ships
-                )
-            else:
-                weakest_planet = next(weakest_planets)
-    except StopIteration:
+    attack_planets = state.my_planets()
+    
+    for enemy_planet in valied_planets:
+        attack_planet, distance= find_closest_strong_planet(state, attack_planets, enemy_planet)
+        if attack_planet:
+            attack_List.append(issue_order(state, attack_planet.ID, enemy_planet.ID, enemy_planet.num_ships + 1 + distance * enemy_planet.growth_rate))
+            attack_planets.remove(attack_planet)
+
+    if not attack_List:
         return False
+    else:
+        return attack_List
 
 
 def spread_to_weakest_neutral_planet(state):
@@ -84,6 +129,20 @@ def spread_to_weakest_neutral_planet(state):
     except StopIteration:
         return False
 
+# def spread_to_weakest_neutral_planet(state):
+#     my_target_planets = [state.planets[f.destination_planet] for f in state.my_fleets()]
+#     valied_planets = [p for p in state.neutral_planets() if p not in my_target_planets]
+
+#     if len(valied_planets) < 1:
+#         return False
+    
+#     weakest_planet = min(valied_planets, key=lambda t: t.num_ships, default=None)
+#     attack_planet, distance= find_closest_strong_planet(state, state.my_planets(), weakest_planet)
+
+#     if not attack_planet:
+#         return False
+#     else:
+#         return issue_order(state, attack_planet.ID, weakest_planet.ID, weakest_planet.num_ships + 1 + distance * weakest_planet.growth_rate)
 
 def defense_attacked_planet(state):
     # this means we dont have any planets
