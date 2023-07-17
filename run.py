@@ -3,6 +3,7 @@ import os, sys
 import random
 
 wins = 0
+runs = 100
 
 
 def show_match(bot, opponent_bot, map_num):
@@ -90,9 +91,9 @@ if __name__ == "__main__":
 
     opponents = [
         "opponent_bots/aggressive_bot.py",
-    ] * 5
+    ] * runs
     maps = []
-    for _ in range(5):
+    for _ in range(runs):
         maps.append(random.randint(1, 100))
 
     my_bot = "behavior_tree_bot/bt_bot.py"
@@ -104,4 +105,4 @@ if __name__ == "__main__":
         else:
             # use this command if you just want the results of the matches reported
             test(my_bot, opponent, map)
-    # print(f"win rate:{wins/100}")
+    print(f"win rate:{round(wins/runs,2)*100}%")
