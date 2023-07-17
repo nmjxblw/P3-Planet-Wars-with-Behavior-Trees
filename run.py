@@ -87,7 +87,7 @@ if __name__ == "__main__":
         "opponent_bots/aggressive_bot.py",
         "opponent_bots/defensive_bot.py",
         "opponent_bots/production_bot.py",
-    ]
+    ] * 20
 
     opponents = [
         "opponent_bots/aggressive_bot.py",
