@@ -2,6 +2,8 @@ import subprocess
 import os, sys
 import random
 
+wins = 0
+
 
 def show_match(bot, opponent_bot, map_num):
     """
@@ -64,6 +66,8 @@ def test(bot, opponent_bot, map_num):
             print(opponent_name, "crashed")
             break
         elif "Player 1 Wins!" in line:
+            global wins
+            wins += 1
             print(bot_name, "wins!")
             break
         elif "Player 2 Wins!" in line:
@@ -86,7 +90,7 @@ if __name__ == "__main__":
 
     opponents = [
         "opponent_bots/aggressive_bot.py",
-    ]*5
+    ] * 5
     maps = []
     for _ in range(5):
         maps.append(random.randint(1, 100))
@@ -100,3 +104,4 @@ if __name__ == "__main__":
         else:
             # use this command if you just want the results of the matches reported
             test(my_bot, opponent, map)
+    # print(f"win rate:{wins/100}")
