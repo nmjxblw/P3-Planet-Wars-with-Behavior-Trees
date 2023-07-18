@@ -6,25 +6,41 @@ sys.path.insert(0, "../")
 from planet_wars import issue_order
 
 
+# def find_closest_strong_planet(state, my_planets, target_planet):
+#     if len(my_planets) < 1:
+#         return None
+
+#     distance = float("inf")
+#     closest_planet = None
+#     # exp = target_planet.growth_rate / (target_planet.num_ships + target_planet.growth_rate * distance + 1) * distance
+#     for planet in my_planets:
+#         curr_distance = state.distance(planet.ID, target_planet.ID)
+#         bool1 = curr_distance < distance
+#         bool2 = planet.num_ships > target_planet.num_ships + target_planet.growth_rate * curr_distance + 1
+#         #logging.info(f"{bool1},{bool2}")
+#         if (
+#             (bool1)
+#             and (bool2)
+#         ):
+#             distance = curr_distance
+#             closest_planet = planet
+#             # exp = curr_exp
+            
+
+#     #logging.info(f"{closest_planet.num_ships},{target_planet.num_ships + target_planet.growth_rate * distance + 1}")
+#     return closest_planet
+
 def find_closest_strong_planet(state, my_planets, target_planet):
     if len(my_planets) < 1:
         return None
 
-    distance = state.distance(my_planets[0].ID, target_planet.ID)
-    closest_planet = my_planets[0]
-    # exp = target_planet.growth_rate / (target_planet.num_ships + target_planet.growth_rate * distance + 1) * distance
-    for planet in my_planets:
-        curr_distance = state.distance(planet.ID, target_planet.ID)
-        if (
-            curr_distance < distance
-            and planet.num_ships - 1
-            >= target_planet.num_ships + target_planet.growth_rate * curr_distance + 1
-        ):
-            distance = curr_distance
-            # exp = curr_exp
-            closest_planet = planet
-
-    return closest_planet
+    
+    strongest_planet = my_planets[0]
+    curr_distance = state.distance(strongest_planet.ID, target_planet.ID)
+    if(strongest_planet.num_ships > target_planet.num_ships + target_planet.growth_rate * curr_distance + 1):
+        return strongest_planet
+    else:
+        return None
 
 
 # def attack_weakest_enemy_planet(state):
@@ -84,9 +100,10 @@ def attack_weakest_enemy_planet(state):
 
     attack_List = []
 
-    valied_planets.sort(key=lambda t: t.num_ships, reverse=False)
+    valied_planets.sort(key=lambda t: t.num_ships, reverse=True)
 
     attack_planets = state.my_planets()
+    attack_planets.sort(key=lambda t: t.num_ships, reverse=True)
 
     for enemy_planet in valied_planets:
         attack_planet = find_closest_strong_planet(state, attack_planets, enemy_planet)
@@ -97,6 +114,7 @@ def attack_weakest_enemy_planet(state):
                 + state.distance(attack_planet.ID, enemy_planet.ID)
                 * enemy_planet.growth_rate
             )
+            #logging.info(f"{attack_planets}")
             attack_List.append(
                 issue_order(state, attack_planet.ID, enemy_planet.ID, require_ships)
             )

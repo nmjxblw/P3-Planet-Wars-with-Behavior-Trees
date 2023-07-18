@@ -60,8 +60,8 @@ if __name__ == "__main__":
 
     behavior_tree = setup_behavior_tree()
     file_path = "my_behavior_tree.txt"
-    with open(file_path, "w") as file:
-        file.write(behavior_tree.tree_to_string())
+    with open(file_path, "w") as f:
+        f.write(behavior_tree.tree_to_string())
     try:
         map_data = ""
         while True:
