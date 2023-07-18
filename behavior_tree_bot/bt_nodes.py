@@ -68,6 +68,15 @@ class Sequence(Composite):
                 return False
         else:  # for loop completed without failure; return success
             return True
+        
+class Decorator(Composite):
+    @log_execution
+    def execute(self, state):
+        success = False
+        for child_node in self.child_nodes:
+            if child_node.execute(state):
+                success = True
+        return success # return true if any child return true
 
 
 ############################### Leaf Nodes ##################################

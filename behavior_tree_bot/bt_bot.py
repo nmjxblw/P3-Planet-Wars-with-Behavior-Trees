@@ -15,7 +15,7 @@ sys.path.append(parentdir)
 
 from behavior_tree_bot.behaviors import *
 from behavior_tree_bot.checks import *
-from behavior_tree_bot.bt_nodes import Selector, Sequence, Action, Check
+from behavior_tree_bot.bt_nodes import Selector, Sequence, Action, Check, Decorator
 
 from planet_wars import PlanetWars, finish_turn
 
@@ -24,7 +24,8 @@ from planet_wars import PlanetWars, finish_turn
 # of winning against all the 5 opponent bots
 def setup_behavior_tree():
     # Top-down construction of behavior tree
-    root = Selector(name="High Level Ordering of Strategies")
+    # root = Selector(name="High Level Ordering of Strategies")
+    root = Decorator(name="Do ALL Strategies")
 
     offensive_plan = Sequence(name="Offensive Strategy")
     largest_fleet_check = Check(have_largest_fleet)
@@ -41,7 +42,7 @@ def setup_behavior_tree():
     defense = Action(defense_attacked_planet)
     defense_plan.child_nodes = [attacked_by_enemy_check, defense]
 
-    root.child_nodes = [defense_plan, offensive_plan, spread_sequence, attack.copy()]
+    root.child_nodes = [offensive_plan, defense_plan, spread_sequence, attack.copy()]
 
     logging.info("\n" + root.tree_to_string())
     return root
@@ -56,7 +57,6 @@ if __name__ == "__main__":
     logging.basicConfig(
         filename=__file__[:-3] + ".log", filemode="w", level=logging.DEBUG
     )
-    
 
     behavior_tree = setup_behavior_tree()
     file_path = "my_behavior_tree.txt"
