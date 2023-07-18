@@ -56,8 +56,12 @@ if __name__ == "__main__":
     logging.basicConfig(
         filename=__file__[:-3] + ".log", filemode="w", level=logging.DEBUG
     )
+    
 
     behavior_tree = setup_behavior_tree()
+    file_path = "my_behavior_tree.txt"
+    with open(file_path, "w") as file:
+        file.write(behavior_tree.tree_to_string())
     try:
         map_data = ""
         while True:
