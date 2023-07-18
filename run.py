@@ -3,8 +3,7 @@ import os, sys
 import random
 
 wins = 0
-runs = 5
-
+runs = 1
 
 def show_match(bot, opponent_bot, map_num):
     """
@@ -73,7 +72,6 @@ def test(bot, opponent_bot, map_num):
             break
         elif "Player 2 Wins!" in line:
             print(opponent_name, "wins!")
-            os.system("PAUSE")
             break
 
         if return_code is not None:
@@ -88,13 +86,13 @@ if __name__ == "__main__":
         "opponent_bots/aggressive_bot.py",
         "opponent_bots/defensive_bot.py",
         "opponent_bots/production_bot.py",
-    ] * 20
-
-    opponents = [
-        "opponent_bots/aggressive_bot.py",
     ] * runs
+
+    # opponents = [
+    #     "opponent_bots/aggressive_bot.py",
+    # ] * runs
     maps = []
-    for _ in range(runs):
+    for _ in range(len(opponents)):
         maps.append(random.randint(1, 100))
 
     my_bot = "behavior_tree_bot/bt_bot.py"
@@ -106,4 +104,4 @@ if __name__ == "__main__":
         else:
             # use this command if you just want the results of the matches reported
             test(my_bot, opponent, map)
-    print(f"win rate:{round(wins/runs,2)*100}%")
+    print(f"win rate:{round(wins/len(opponents),3)*100}%")
