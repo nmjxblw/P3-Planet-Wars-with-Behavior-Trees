@@ -3,7 +3,7 @@ import os, sys
 import random
 
 wins = 0
-runs = 100
+runs = 5
 
 
 def show_match(bot, opponent_bot, map_num):
