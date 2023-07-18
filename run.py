@@ -73,6 +73,7 @@ def test(bot, opponent_bot, map_num):
             break
         elif "Player 2 Wins!" in line:
             print(opponent_name, "wins!")
+            os.system("PAUSE")
             break
 
         if return_code is not None:
