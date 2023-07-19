@@ -14,9 +14,10 @@
   -  Your bot completes each test case (individual points per test case).
   -  The winner(s) of the competition will earn extra credit.  
   
-- **Modified of the Code**  
-  **Decorator**  
-  - We added decorator nodes to the code, now the bot can execute multiple strategies in one turn. This modification enables the bot to win against specific enemies in certain maps. Although the algorithm cannot achieve victory against all enemies on every map, the bot can defeat these enemies in most maps.  
+- **Modified of the Code**
+
+  **Decorator**
+  - We added decorator nodes to the code, now the bot can execute multiple strategies in one turn. This modification enables the bot to win against specific enemies in certain maps. Although the algorithm cannot achieve victory against all enemies on every map, the bot can defeat these enemies in most maps.
     
   **Defense strategy**
   - Implemented and optimized defense strategies, and now the defense strategy has reached its highest level of effectiveness. The defense strategy will deploy fleets to support or attack target planets based on the opponent's actions. Effectively, the defense strategy has significantly reduced the opponent's expansion efficiency.  
